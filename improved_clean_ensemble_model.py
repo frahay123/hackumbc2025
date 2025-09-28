@@ -32,9 +32,9 @@ class ImprovedEnsembleModel:
         
         try:
             df = pd.read_csv(self.data_path)
-            print(f"✅ Data loaded successfully. Shape: {df.shape}")
+            print(f"Data loaded successfully. Shape: {df.shape}")
         except FileNotFoundError:
-            print(f"❌ Error: '{self.data_path}' not found.")
+            print(f"Error: '{self.data_path}' not found.")
             return None, None
         
         # Define target variable
@@ -90,21 +90,21 @@ class ImprovedEnsembleModel:
         X = df.drop(columns=columns_to_drop)
         y = df[target_column]
         
-        print(f"📊 Dropped {len(columns_to_drop)} leakage-prone columns")
-        print(f"📊 Remaining features: {X.shape[1]}")
-        print(f"📊 Target distribution: min={y.min():.3f}, max={y.max():.3f}, mean={y.mean():.3f}")
+        print(f"Dropped {len(columns_to_drop)} leakage-prone columns")
+        print(f"Remaining features: {X.shape[1]}")
+        print(f"Target distribution: min={y.min():.3f}, max={y.max():.3f}, mean={y.mean():.3f}")
         
         # Handle categorical variables
         categorical_cols = X.select_dtypes(include=['object']).columns
         if len(categorical_cols) > 0:
-            print(f"📊 Encoding {len(categorical_cols)} categorical columns")
+            print(f"Encoding {len(categorical_cols)} categorical columns")
             X = pd.get_dummies(X, columns=categorical_cols, drop_first=True)
         
         # Handle missing values
         X = X.fillna(X.median())
         y = y.fillna(y.median())
         
-        print(f"📊 Final feature matrix shape: {X.shape}")
+        print(f"Final feature matrix shape: {X.shape}")
         
         return X, y
     
@@ -120,7 +120,7 @@ class ImprovedEnsembleModel:
         # Get selected feature names
         selected_features = X.columns[self.feature_selector.get_support()].tolist()
         
-        print(f"📊 Selected {len(selected_features)} best features out of {X.shape[1]}")
+        print(f"Selected {len(selected_features)} best features out of {X.shape[1]}")
         
         # Create DataFrame with selected features
         X_selected_df = pd.DataFrame(X_selected, columns=selected_features, index=X.index)
@@ -136,8 +136,8 @@ class ImprovedEnsembleModel:
             X, y, test_size=0.2, random_state=42
         )
         
-        print(f"📊 Training set: {X_train.shape[0]} samples")
-        print(f"📊 Test set: {X_test.shape[0]} samples")
+        print(f"Training set: {X_train.shape[0]} samples")
+        print(f"Test set: {X_test.shape[0]} samples")
         
         # Define models with hyperparameter grids
         models_config = {
@@ -186,7 +186,7 @@ class ImprovedEnsembleModel:
         performance_results = []
         
         for name, config in models_config.items():
-            print(f"\n🔧 Training {name}...")
+            print(f"\nTraining {name}...")
             
             # Create pipeline with scaling if needed
             if config['scale']:
@@ -215,7 +215,7 @@ class ImprovedEnsembleModel:
             performance = self.evaluate_model(y_test, y_pred, name)
             performance_results.append(performance)
             
-            print(f"✅ {name} - Best CV Score: {-grid_search.best_score_:.4f}")
+            print(f"{name} - Best CV Score: {-grid_search.best_score_:.4f}")
         
         self.models = trained_models
         return X_train, X_test, y_train, y_test, predictions, performance_results
@@ -310,22 +310,22 @@ class ImprovedEnsembleModel:
             best_individual = min(individual_models, key=lambda x: performance_results[[r['name'] for r in performance_results].index(x)]['mse'])
             best_model = self.models[best_individual]
             model_to_save = best_individual
-            print(f"💡 Ensemble performed best, saving best individual model: {best_individual}")
+            print(f"Ensemble performed best, saving best individual model: {best_individual}")
         else:
             best_model = self.models[best_model_name]
             model_to_save = best_model_name
         
         joblib.dump(best_model, f'improved_{model_to_save.lower().replace(" ", "_")}_model.pkl')
-        print(f"✅ Best model saved as 'improved_{model_to_save.lower().replace(" ", "_")}_model.pkl'")
+        print(f"Best model saved as 'improved_{model_to_save.lower().replace(" ", "_")}_model.pkl'")
         
         # Save scaler and feature selector if they exist
         if hasattr(best_model, 'named_steps') and 'scaler' in best_model.named_steps:
             joblib.dump(best_model.named_steps['scaler'], 'improved_scaler.pkl')
-            print("✅ Scaler saved as 'improved_scaler.pkl'")
+            print("Scaler saved as 'improved_scaler.pkl'")
         
         if self.feature_selector is not None:
             joblib.dump(self.feature_selector, 'improved_feature_selector.pkl')
-            print("✅ Feature selector saved as 'improved_feature_selector.pkl'")
+            print("Feature selector saved as 'improved_feature_selector.pkl'")
         
         # Save results summary
         results_summary = {
@@ -339,12 +339,12 @@ class ImprovedEnsembleModel:
         
         with open('improved_model_results.json', 'w') as f:
             json.dump(results_summary, f, indent=2)
-        print("✅ Results summary saved as 'improved_model_results.json'")
+        print("Results summary saved as 'improved_model_results.json'")
     
     def run_complete_pipeline(self):
         """Run the complete improved modeling pipeline"""
-        print("🚀 Starting Improved Ensemble Model Pipeline")
-        print("🛡️  With comprehensive data leakage prevention")
+        print("Starting Improved Ensemble Model Pipeline")
+        print("With comprehensive data leakage prevention")
         
         # Load and preprocess data
         X, y = self.load_and_preprocess_data()
@@ -365,7 +365,7 @@ class ImprovedEnsembleModel:
         best_model_performance = min(performance_results, key=lambda x: x['mse'])
         best_model_name = best_model_performance['name']
         
-        print(f"\n🏆 BEST MODEL: {best_model_name}")
+        print(f"\nBEST MODEL: {best_model_name}")
         print(f"   MSE: {best_model_performance['mse']:.4f}")
         print(f"   RMSE: {best_model_performance['rmse']:.4f}")
         print(f"   R²: {best_model_performance['r2']:.4f}")
@@ -376,10 +376,10 @@ class ImprovedEnsembleModel:
         # Save models and results
         self.save_models_and_results(best_model_name, performance_results, model_weights)
         
-        print(f"\n🎉 IMPROVED ENSEMBLE MODEL PIPELINE COMPLETED!")
-        print(f"📊 Best model: {best_model_name}")
-        print(f"🛡️  Data leakage prevention applied")
-        print(f"💾 All models and results saved")
+        print(f"\nIMPROVED ENSEMBLE MODEL PIPELINE COMPLETED")
+        print(f"Best model: {best_model_name}")
+        print(f"Data leakage prevention applied")
+        print(f"All models and results saved")
 
 def main():
     """Main function to run the improved ensemble model"""

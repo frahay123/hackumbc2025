@@ -32,7 +32,6 @@ export function RiskChart({ predictions }: RiskChartProps) {
     id: index + 1,
     name: pred.student_type,
     riskScore: (pred.risk_score * 100).toFixed(1),
-    confidence: (pred.confidence * 100).toFixed(1),
     timestamp: new Date(pred.timestamp).toLocaleTimeString(),
     riskLevel: pred.risk_level,
     classification: pred.class_prediction,
@@ -67,9 +66,7 @@ export function RiskChart({ predictions }: RiskChartProps) {
           <p className="text-sm">
             <span className="text-chart-4">Risk Score:</span> {data.riskScore}%
           </p>
-          <p className="text-sm">
-            <span className="text-chart-1">Confidence:</span> {data.confidence}%
-          </p>
+          {/* Confidence removed */}
           <p className="text-sm">
             <span className="text-muted-foreground">Level:</span> {data.riskLevel}
           </p>
@@ -98,7 +95,6 @@ export function RiskChart({ predictions }: RiskChartProps) {
             />
             <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="riskScore" fill="hsl(var(--chart-4))" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="confidence" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
           </BarChart>
         );
       case 'line':
@@ -124,13 +120,7 @@ export function RiskChart({ predictions }: RiskChartProps) {
               strokeWidth={3}
               dot={{ fill: "hsl(var(--chart-4))", strokeWidth: 2, r: 6 }}
             />
-            <Line 
-              type="monotone" 
-              dataKey="confidence" 
-              stroke="hsl(var(--chart-1))" 
-              strokeWidth={3}
-              dot={{ fill: "hsl(var(--chart-1))", strokeWidth: 2, r: 6 }}
-            />
+            {/* Confidence line removed */}
           </LineChart>
         );
       case 'area':
@@ -156,13 +146,7 @@ export function RiskChart({ predictions }: RiskChartProps) {
               fill="hsl(var(--chart-4) / 0.6)"
               strokeWidth={2}
             />
-            <Area 
-              type="monotone" 
-              dataKey="confidence" 
-              stroke="hsl(var(--chart-1))" 
-              fill="hsl(var(--chart-1) / 0.6)"
-              strokeWidth={2}
-            />
+            {/* Confidence area removed */}
           </AreaChart>
         );
     }
@@ -175,7 +159,7 @@ export function RiskChart({ predictions }: RiskChartProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              📊 Risk Analysis Timeline
+              📊 Risk Analysis
             </CardTitle>
             <div className="flex gap-2">
               <Button
@@ -213,10 +197,7 @@ export function RiskChart({ predictions }: RiskChartProps) {
               <div className="w-3 h-3 bg-chart-4 rounded-full"></div>
               <span>Risk Score</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-chart-1 rounded-full"></div>
-              <span>Confidence</span>
-            </div>
+            {/* Confidence legend removed */}
           </div>
         </CardContent>
       </Card>

@@ -135,12 +135,12 @@ def load_models():
         # Load feature selector
         feature_selector = joblib.load('improved_feature_selector.pkl')
         
-        logger.info("✅ Model components loaded successfully")
-        logger.info(f"📊 Model: {model_info.get('best_model', 'Unknown')}")
-        logger.info(f"📊 Features used: {model_info.get('features_used', 'Unknown')}")
+        logger.info("Model components loaded successfully")
+        logger.info(f"Model: {model_info.get('best_model', 'Unknown')}")
+        logger.info(f"Features used: {model_info.get('features_used', 'Unknown')}")
         
     except Exception as e:
-        logger.error(f"❌ Error loading models: {str(e)}")
+        logger.error(f"Error loading models: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to load models: {str(e)}")
 
 def get_sample_profiles():
@@ -341,7 +341,7 @@ def preprocess_features(student_data: StudentFeatures) -> np.ndarray:
         return features_array
         
     except Exception as e:
-        logger.error(f"❌ Error preprocessing features: {str(e)}")
+        logger.error(f"Error preprocessing features: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Feature preprocessing failed: {str(e)}")
 
 def predict_risk_score(features: np.ndarray) -> Dict[str, Any]:
@@ -379,7 +379,7 @@ def predict_risk_score(features: np.ndarray) -> Dict[str, Any]:
         }
         
     except Exception as e:
-        logger.error(f"❌ Error making prediction: {str(e)}")
+        logger.error(f"Error making prediction: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
 
 @app.get("/", response_class=HTMLResponse)
@@ -417,24 +417,24 @@ async def interactive_dashboard():
     </head>
     <body>
         <div class="container">
-            <h1>🎓 Student Risk Prediction - Interactive Dashboard</h1>
+            <h1>Student Risk Prediction - Interactive Dashboard</h1>
             
             <div class="keyboard-shortcuts">
-                <h3>⌨️ Keyboard Shortcuts</h3>
+                <h3>Keyboard Shortcuts</h3>
                 <p><span class="key">1</span> - Will Fail College (Extreme High Risk) | <span class="key">2</span> - Is OK (Average) | <span class="key">3</span> - Perfect Student (Extreme Low Risk)</p>
             </div>
             
             <div class="section">
-                <h2>🚀 Quick Test (Hotkeys)</h2>
+                <h2>Quick Test (Hotkeys)</h2>
                 <div class="hotkeys">
-                    <button class="hotkey-btn fail-btn" onclick="testSample('Will Fail College')">1️⃣ Will Fail College (Extreme High Risk)</button>
-                    <button class="hotkey-btn ok-btn" onclick="testSample('Is OK')">2️⃣ Is OK (Average Student)</button>
-                    <button class="hotkey-btn perfect-btn" onclick="testSample('Perfect Student')">3️⃣ Perfect Student (Extreme Low Risk)</button>
+                    <button class="hotkey-btn fail-btn" onclick="testSample('Will Fail College')">1. Will Fail College (Extreme High Risk)</button>
+                    <button class="hotkey-btn ok-btn" onclick="testSample('Is OK')">2. Is OK (Average Student)</button>
+                    <button class="hotkey-btn perfect-btn" onclick="testSample('Perfect Student')">3. Perfect Student (Extreme Low Risk)</button>
                 </div>
             </div>
             
             <div class="section">
-                <h2>🔧 Custom Parameters</h2>
+                <h2>Custom Parameters</h2>
                 <form id="customForm">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div>
@@ -553,7 +553,7 @@ async def interactive_dashboard():
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="submit-btn" onclick="testCustom()">🔮 Predict Risk</button>
+                    <button type="button" class="submit-btn" onclick="testCustom()">Predict Risk</button>
                 </form>
             </div>
             
@@ -661,7 +661,7 @@ async def interactive_dashboard():
                 const resultDiv = document.getElementById('result');
                 resultDiv.innerHTML = `
                     <div class="result ${riskClass}">
-                        <h3>🎯 Prediction Result</h3>
+                        <h3>Prediction Result</h3>
                         <p><strong>Student Type:</strong> ${result.student_type}</p>
                         <p><strong>Risk Score:</strong> ${result.risk_score.toFixed(3)}</p>
                         <p><strong>Risk Level:</strong> ${result.risk_level}</p>
@@ -724,7 +724,7 @@ async def predict_sample(student_type: str):
         )
         
     except Exception as e:
-        logger.error(f"❌ Sample prediction error: {str(e)}")
+        logger.error(f"Sample prediction error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Sample prediction failed: {str(e)}")
 
 @app.post("/predict/custom", response_model=PredictionResponse)
@@ -747,7 +747,7 @@ async def predict_custom(student_data: StudentFeatures):
         )
         
     except Exception as e:
-        logger.error(f"❌ Custom prediction error: {str(e)}")
+        logger.error(f"Custom prediction error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Custom prediction failed: {str(e)}")
 
 @app.get("/samples", response_model=Dict[str, Dict])

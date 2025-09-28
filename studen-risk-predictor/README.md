@@ -1,73 +1,47 @@
-# Welcome to your Lovable project
+# Student Risk Prediction Dashboard
 
-## Project info
+A machine learning powered student success analytics platform with interactive visualization and risk assessment tools.
 
-**URL**: https://lovable.dev/projects/789f518c-6420-4778-99f2-b72a8c03f4a3
+## Features
 
-## How can I edit this code?
+- **Risk Assessment**: Real-time student risk prediction using machine learning models
+- **Interactive Dashboard**: Custom student profiling and visualization tools
+- **Quick Test Profiles**: Pre-built student profiles for testing
+- **Custom Analysis**: Detailed student feature input and analysis
+- **Data Visualization**: Charts and graphs for risk analysis
 
-There are several ways of editing your application.
+## Technology Stack
 
-**Use Lovable**
+- **Frontend**: React + TypeScript + Vite
+- **UI Components**: shadcn/ui + Tailwind CSS
+- **Charts**: Recharts
+- **Backend**: FastAPI (Python)
+- **Machine Learning**: Scikit-learn models
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/789f518c-6420-4778-99f2-b72a8c03f4a3) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+1. Install dependencies:
+```bash
+npm install
+```
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+2. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+3. The application will be available at `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## API Integration
 
-**Use GitHub Codespaces**
+The frontend connects to a FastAPI backend running on `localhost:8004`. Make sure the backend server is running for full functionality.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Build for Production
 
-## What technologies are used for this project?
+```bash
+npm run build
+```
 
-This project is built with:
+## License
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/789f518c-6420-4778-99f2-b72a8c03f4a3) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+This project is part of the HackUMBC 2025 competition.

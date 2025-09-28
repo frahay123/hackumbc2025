@@ -8,9 +8,10 @@ import { useState } from "react";
 
 interface QuickTestProps {
   onPrediction: (prediction: PredictionResponse) => void;
+  onPresetSelected?: (features: Record<string, number | string>) => void;
 }
 
-export function QuickTest({ onPrediction }: QuickTestProps) {
+export function QuickTest({ onPrediction, onPresetSelected }: QuickTestProps) {
   const [loading, setLoading] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -40,6 +41,61 @@ export function QuickTest({ onPrediction }: QuickTestProps) {
     try {
       const prediction = await StudentRiskAPI.predictSample(studentType);
       onPrediction(prediction);
+      // Also surface the features that likely triggered this profile into the Custom form
+      if (onPresetSelected) {
+        const presetMap: Record<StudentType, Record<string, number | string>> = {
+          "Perfect Student": {
+            total_courses_completed: 40,
+            total_credits_earned: 120,
+            failing_courses: 0,
+            enjoyment_rate: 0.9,
+            degree_completion_ratio: 0.95,
+            current_course_load: 5,
+            preferred_course_load: 5,
+            work_hours_per_week: 5,
+            avg_current_difficulty: 5,
+            peer_network_size: 50,
+            peer_avg_gpa: 3.7,
+            professors_known: 8,
+            learning_style_Visual: 1,
+            degree_program: "Bachelor_of_Science_in_Computer_Science",
+          },
+          "Is OK": {
+            total_courses_completed: 20,
+            total_credits_earned: 60,
+            failing_courses: 1,
+            enjoyment_rate: 0.6,
+            degree_completion_ratio: 0.6,
+            current_course_load: 4,
+            preferred_course_load: 4,
+            work_hours_per_week: 15,
+            avg_current_difficulty: 6,
+            peer_network_size: 20,
+            peer_avg_gpa: 3.0,
+            professors_known: 6,
+            learning_style_Visual: 1,
+            degree_program: "Bachelor_of_Science_in_Computer_Science",
+          },
+          "Will Fail College": {
+            total_courses_completed: 5,
+            total_credits_earned: 15,
+            failing_courses: 3,
+            enjoyment_rate: 0.2,
+            degree_completion_ratio: 0.1,
+            current_course_load: 6,
+            preferred_course_load: 3,
+            work_hours_per_week: 30,
+            avg_current_difficulty: 8.5,
+            peer_network_size: 5,
+            peer_avg_gpa: 2.2,
+            professors_known: 1,
+            learning_style_Visual: 0,
+            degree_program: "Bachelor_of_Science_in_Biology",
+          },
+        };
+
+        onPresetSelected(presetMap[studentType]);
+      }
       toast({
         title: "Prediction Complete",
         description: `${studentType} profile analyzed successfully`,
@@ -86,14 +142,7 @@ export function QuickTest({ onPrediction }: QuickTestProps) {
           ))}
         </div>
         
-        <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-          <h4 className="text-sm font-medium mb-2">⌨️ Keyboard Shortcuts</h4>
-          <div className="text-xs text-muted-foreground space-y-1">
-            <div><kbd className="px-1 py-0.5 bg-muted rounded text-xs">1</kbd> Perfect Student</div>
-            <div><kbd className="px-1 py-0.5 bg-muted rounded text-xs">2</kbd> Is OK</div>
-            <div><kbd className="px-1 py-0.5 bg-muted rounded text-xs">3</kbd> Will Fail College</div>
-          </div>
-        </div>
+        {/* Keyboard shortcuts section removed */}
       </CardContent>
     </Card>
   );

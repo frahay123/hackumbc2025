@@ -10,6 +10,7 @@ import { StudentRiskAPI } from "@/services/api";
 const Index = () => {
   const [predictions, setPredictions] = useState<PredictionResponse[]>([]);
   const [currentPrediction, setCurrentPrediction] = useState<PredictionResponse | null>(null);
+  const [preset, setPreset] = useState<Record<string, number | string> | undefined>(undefined);
 
   const handleNewPrediction = (prediction: PredictionResponse) => {
     setCurrentPrediction(prediction);
@@ -44,13 +45,13 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="space-y-6">
-            <QuickTest onPrediction={handleNewPrediction} />
+            <QuickTest onPrediction={handleNewPrediction} onPresetSelected={(f) => setPreset(f)} />
             <RiskMeter prediction={currentPrediction} />
           </div>
           
           {/* Middle Column */}
           <div className="lg:col-span-2 space-y-6">
-            <StudentForm onPrediction={handleNewPrediction} />
+            <StudentForm onPrediction={handleNewPrediction} preset={preset as any} />
             <RiskChart predictions={predictions} />
           </div>
         </div>

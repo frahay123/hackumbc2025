@@ -23,7 +23,6 @@ export function RiskMeter({ prediction }: RiskMeterProps) {
   }
 
   const riskScore = prediction.risk_score;
-  const confidence = prediction.confidence;
 
   // Create data for the pie chart
   const riskData = [
@@ -31,10 +30,7 @@ export function RiskMeter({ prediction }: RiskMeterProps) {
     { name: "Safe", value: (1 - riskScore) * 100, color: "hsl(var(--muted))" }
   ];
 
-  const confidenceData = [
-    { name: "Confidence", value: confidence * 100, color: "hsl(var(--primary))" },
-    { name: "Uncertainty", value: (1 - confidence) * 100, color: "hsl(var(--muted))" }
-  ];
+  // Confidence display removed per requirements
 
   return (
     <Card className="border-border bg-card">
@@ -44,9 +40,8 @@ export function RiskMeter({ prediction }: RiskMeterProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Risk Score Meter */}
-          <div className="text-center">
+        <div className="flex justify-center">
+          <div className="text-center flex flex-col items-center">
             <h4 className="text-sm font-medium mb-2">Risk Score</h4>
             <div className="relative h-32 w-32 mx-auto">
               <ResponsiveContainer width="100%" height="100%">
@@ -74,39 +69,8 @@ export function RiskMeter({ prediction }: RiskMeterProps) {
                 </div>
               </div>
             </div>
-            <div className={`text-sm font-medium mt-2 ${getRiskTextColor(riskScore)}`}>
+            <div className={`text-sm font-medium mt-2 text-center ${getRiskTextColor(riskScore)}`}>
               {prediction.risk_level}
-            </div>
-          </div>
-
-          {/* Confidence Meter */}
-          <div className="text-center">
-            <h4 className="text-sm font-medium mb-2">Confidence</h4>
-            <div className="relative h-32 w-32 mx-auto">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={confidenceData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={35}
-                    outerRadius={60}
-                    startAngle={90}
-                    endAngle={-270}
-                    dataKey="value"
-                  >
-                    {confidenceData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-lg font-bold">{(confidence * 100).toFixed(0)}%</div>
-                  <div className="text-xs text-muted-foreground">Sure</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

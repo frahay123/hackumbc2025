@@ -26,18 +26,18 @@ class EnhancedFinalExtractor:
         with self.driver.session() as session:
             try:
                 session.run("RETURN apoc.version()").single()
-                print("✅ APOC Plugin: Available")
+                print("APOC Plugin: Available")
                 apoc_available = True
             except exceptions.ClientError:
-                print("❌ APOC Plugin: Not available")
+                print("APOC Plugin: Not available")
                 apoc_available = False
 
             try:
                 gds_version = session.run("CALL gds.version()").single()["gdsVersion"]
-                print(f"✅ GDS Plugin: Available (Version {gds_version})")
+                print(f"GDS Plugin: Available (Version {gds_version})")
                 gds_available = True
             except (exceptions.ClientError, KeyError):
-                print("❌ GDS Plugin: Not available or version key has changed.")
+                print("GDS Plugin: Not available or version key has changed.")
                 gds_available = False
         return gds_available, apoc_available
 
@@ -297,7 +297,7 @@ class EnhancedFinalExtractor:
             comprehensive_df = pd.DataFrame([dict(record) for record in result])
         
         elapsed_time = time.time() - start_time
-        print(f"✅ Enhanced comprehensive features extracted for {len(comprehensive_df)} students. Time: {elapsed_time:.2f}s")
+        print(f"Enhanced comprehensive features extracted for {len(comprehensive_df)} students. Time: {elapsed_time:.2f}s")
         return comprehensive_df
 
     def extract_gds_features(self):
@@ -321,7 +321,7 @@ class EnhancedFinalExtractor:
             ) YIELD nodeCount, relationshipCount
             """
             result = session.run(projection_query).single()
-            print(f"✅ GDS projection created: {result['nodeCount']} nodes, {result['relationshipCount']} relationships")
+            print(f"GDS projection created: {result['nodeCount']} nodes, {result['relationshipCount']} relationships")
 
             # --- Run each algorithm separately ---
 
@@ -360,7 +360,7 @@ class EnhancedFinalExtractor:
             gds_df = gds_df.merge(louvain_df, on='student_id', how='outer')
 
         elapsed_time = time.time() - start_time
-        print(f"✅ GDS features extracted for {len(gds_df)} students. Time: {elapsed_time:.2f}s")
+        print(f"GDS features extracted for {len(gds_df)} students. Time: {elapsed_time:.2f}s")
         return gds_df
 
     def extract_textbook_features(self):
@@ -406,7 +406,7 @@ class EnhancedFinalExtractor:
             textbook_df = pd.DataFrame([dict(record) for record in result])
         
         elapsed_time = time.time() - start_time
-        print(f"✅ Textbook features extracted for {len(textbook_df)} students. Time: {elapsed_time:.2f}s")
+        print(f"Textbook features extracted for {len(textbook_df)} students. Time: {elapsed_time:.2f}s")
         return textbook_df
 
     def calculate_enhanced_risk_assessment(self, df):
@@ -460,7 +460,7 @@ class EnhancedFinalExtractor:
                                    (df['course_load_difficulty_risk'] >= 1.5) |
                                    (df['prereq_preparedness_ratio'] < 0.5)).astype(int)
         
-        print(f"✅ Enhanced risk assessment calculated for {len(df)} students")
+        print(f"Enhanced risk assessment calculated for {len(df)} students")
         return df
 
     def normalize_enhanced_features(self, df):
@@ -537,7 +537,7 @@ class EnhancedFinalExtractor:
         
         normalized_df['enhanced_final_risk_score'] = np.clip(weighted_risk, 0, 1)
         
-        print(f"✅ Enhanced features normalized to 0-1 scale for {len(df)} students")
+        print(f"Enhanced features normalized to 0-1 scale for {len(df)} students")
         print(f"   Enhanced final risk score range: {normalized_df['enhanced_final_risk_score'].min():.3f} - {normalized_df['enhanced_final_risk_score'].max():.3f}")
         
         return normalized_df
@@ -579,7 +579,7 @@ class EnhancedFinalExtractor:
         # Normalize features for preprocessing
         combined_df = self.normalize_enhanced_features(combined_df)
 
-        print(f"✅ Enhanced combined dataset created: {len(combined_df)} students with {len(combined_df.columns)} features")
+        print(f"Enhanced combined dataset created: {len(combined_df)} students with {len(combined_df.columns)} features")
         return combined_df
 
     def export_enhanced_dataset(self, combined_df):
@@ -596,7 +596,7 @@ def main():
     try:
         gds_available, apoc_available = extractor.check_plugins()
         if not apoc_available:
-            print("\n❌ APOC plugin is not available. Please install it to continue.")
+            print("\nAPOC plugin is not available. Please install it to continue.")
             return
 
         # Extract enhanced comprehensive features
@@ -608,7 +608,7 @@ def main():
         if gds_available:
             gds_df = extractor.extract_gds_features()
         else:
-            print("\n⚠️ GDS is not available, skipping GDS features.")
+            print("\nGDS is not available, skipping GDS features.")
 
         if not comprehensive_df.empty:
             # Combine all features with enhanced risk assessment and normalization
@@ -618,7 +618,7 @@ def main():
             extractor.export_enhanced_dataset(combined_df)
             
             # Print enhanced summary statistics
-            print(f"\n📊 ENHANCED DATASET SUMMARY:")
+            print(f"\nENHANCED DATASET SUMMARY:")
             print(f"   Students: {len(combined_df)}")
             print(f"   Features: {len(combined_df.columns)}")
             print(f"   Enhanced Final Risk Score Range: {combined_df['enhanced_final_risk_score'].min():.3f} - {combined_df['enhanced_final_risk_score'].max():.3f}")
@@ -631,7 +631,7 @@ def main():
                 print(f"     {risk_names.get(level, f'Level {level}')}: {count} students ({count/len(combined_df)*100:.1f}%)")
             
             # Show sample of enhanced features
-            print(f"\n📈 ENHANCED DATA QUALITY CHECK:")
+            print(f"\nENHANCED DATA QUALITY CHECK:")
             enhanced_features = ['weighted_current_difficulty', 'prereq_preparedness_ratio', 
                                'learning_style_success_rate', 'course_load_difficulty_risk',
                                'difficulty_jump', 'semester_difficulty_balance']
@@ -640,16 +640,16 @@ def main():
                     non_zero = (combined_df[feature] != 0).sum() if combined_df[feature].dtype in ['int64', 'float64'] else (combined_df[feature] != 'Unknown').sum()
                     print(f"   {feature}: {non_zero}/{len(combined_df)} non-default values ({non_zero/len(combined_df)*100:.1f}%)")
             
-            print("\n🚀 ENHANCED FINAL CORRECTED GDS+APOC FEATURE EXTRACTION COMPLETED SUCCESSFULLY!")
-            print("✅ All enhanced features normalized to 0-1 scale for ML preprocessing")
-            print("✅ Enhanced final risk score calculated with course difficulty factors")
-            print("✅ Dataset ready for enhanced machine learning model training")
-            print("✅ Comprehensive course difficulty analysis implemented")
+            print("\nENHANCED FINAL CORRECTED GDS+APOC FEATURE EXTRACTION COMPLETED SUCCESSFULLY")
+            print("All enhanced features normalized to 0-1 scale for ML preprocessing")
+            print("Enhanced final risk score calculated with course difficulty factors")
+            print("Dataset ready for enhanced machine learning model training")
+            print("Comprehensive course difficulty analysis implemented")
         else:
-            print("\n⚠️ No data was extracted from APOC. Halting script.")
+            print("\nNo data was extracted from APOC. Halting script.")
 
     except Exception as e:
-        print(f"\n❌ An unexpected error occurred: {e}")
+        print(f"\nAn unexpected error occurred: {e}")
         import traceback
         traceback.print_exc()
     finally:

@@ -34,7 +34,7 @@ export function Header() {
               🎓 Student Risk Prediction
             </h1>
             <p className="text-muted-foreground mt-2">
-              AI-powered student success analytics with interactive visualization
+              Machine learning powered student success analytics with interactive visualization
             </p>
           </div>
           

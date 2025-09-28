@@ -7,45 +7,58 @@ import { StudentRiskAPI, calculateNormalizedFields } from "@/services/api";
 import { PredictionResponse, StudentFeatures } from "@/types/student";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface StudentFormProps {
   onPrediction: (prediction: PredictionResponse) => void;
+  preset?: Partial<typeof defaultFormData>;
 }
 
-export function StudentForm({ onPrediction }: StudentFormProps) {
+const defaultFormData = {
+  preferred_course_load: 4,
+  work_hours_per_week: 15,
+  total_courses_completed: 20,
+  total_credits_earned: 60,
+  failing_courses: 1,
+  enjoyment_rate: 0.6,
+  max_completed_difficulty: 6.5,
+  avg_current_difficulty: 6,
+  max_current_difficulty: 7,
+  weighted_current_difficulty: 6.2,
+  courses_with_met_prereqs: 18,
+  total_prereqs_met: 15,
+  prereq_preparedness_ratio: 0.75,
+  learning_style_success_rate: 0.6,
+  degree_completion_ratio: 0.6,
+  current_course_load: 4,
+  current_credits: 12,
+  peer_network_size: 20,
+  peer_avg_gpa: 3.0,
+  professors_known: 6,
+  page_views_x: 1200,
+  textbooks_accessed_x: 60,
+  pagerank: 0.5,
+  degree: 0.7,
+  learning_style_Visual: 1,
+  financial_aid_status_Unknown: 0,
+  degree_program: "Bachelor_of_Science_in_Computer_Science"
+};
+
+export function StudentForm({ onPrediction, preset }: StudentFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
-    preferred_course_load: 4,
-    work_hours_per_week: 15,
-    total_courses_completed: 20,
-    total_credits_earned: 60,
-    failing_courses: 1,
-    enjoyment_rate: 0.6,
-    max_completed_difficulty: 6.5,
-    avg_current_difficulty: 6,
-    max_current_difficulty: 7,
-    weighted_current_difficulty: 6.2,
-    courses_with_met_prereqs: 18,
-    total_prereqs_met: 15,
-    prereq_preparedness_ratio: 0.75,
-    learning_style_success_rate: 0.6,
-    degree_completion_ratio: 0.6,
-    current_course_load: 4,
-    current_credits: 12,
-    peer_network_size: 20,
-    peer_avg_gpa: 3.0,
-    professors_known: 6,
-    page_views_x: 1200,
-    textbooks_accessed_x: 60,
-    pagerank: 0.5,
-    degree: 0.7,
-    learning_style_Visual: 1,
-    financial_aid_status_Unknown: 0,
-    degree_program: "Bachelor_of_Science_in_Computer_Science"
+    ...defaultFormData,
+    ...(preset || {})
   });
+
+  // Apply new presets when provided (e.g., from QuickTest)
+  useEffect(() => {
+    if (preset) {
+      setFormData(prev => ({ ...prev, ...preset }));
+    }
+  }, [preset]);
 
   const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({
@@ -273,7 +286,7 @@ export function StudentForm({ onPrediction }: StudentFormProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="degree_program">Degree Program</Label>
-                <Select value={formData.degree_program} onValueChange={(value) => handleInputChange('degree_program', value)}>
+                <Select value={formData.degree_program} onValueChange={(value) => setFormData(prev => ({ ...prev, degree_program: value }))}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
